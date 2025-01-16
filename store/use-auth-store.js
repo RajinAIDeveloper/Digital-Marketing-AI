@@ -7,8 +7,10 @@ export const useAuthStore = create()(
   persist(
     (set) => ({
       user: null,
+      role: null,
       setUser: (user) => set({ user }),
-      clearUser: () => set({ user: null }),
+      clearUser: () => set({ user: null, role: null }),
+      setRole: (role) => set({ role }),
     }),
     {
       name: 'auth-store',
