@@ -13,15 +13,19 @@ import {
 import Link from 'next/link';
 import { cn } from "@/lib/utils";
 import { usePathname } from 'next/navigation';
-import { useAuthStore } from '@/store/use-auth-store';
+import { useAuthStore } from '@/store/auth-store';
 
 export default function DashboardShell({ 
-  children 
+  children,
+  userType: initialUserType // Get initial userType from props
 }) {
   const pathname = usePathname();
   const user = useAuthStore(state => state.user);
+  console.log('user client from authstore', user);
   
-  const isAdmin = user?.userType === 'admin';
+  // Use either the store user type or initial user type
+  const isAdmin = user?.userType === 'admin' || initialUserType === 'admin';
+
   
   const sellerNavItems = [
     {
@@ -124,8 +128,8 @@ export default function DashboardShell({
             <div className="flex items-center gap-3 px-3 py-2">
               <UserButton afterSignOutUrl="/" />
               <div className="flex flex-col">
-                <span className="text-sm font-medium">{user?.fullName}</span>
-                <span className="text-xs text-gray-500">{user?.companyName}</span>
+                <span className="text-sm font-medium">{user?.fullName || 'Loading...'}</span>
+                <span className="text-xs text-gray-500">{user?.companyName || ''}</span>
               </div>
             </div>
           </div>
@@ -140,7 +144,7 @@ export default function DashboardShell({
             {isAdmin ? 'Admin Dashboard' : 'Seller Dashboard'}
           </h1>
           <div className="text-sm text-gray-500">
-            Welcome back, {user?.fullName}
+            Welcome back, {user?.fullName || 'User'}
           </div>
         </header>
 

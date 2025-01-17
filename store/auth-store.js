@@ -1,19 +1,25 @@
-// store/use-auth-store.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User } from '@/db/schema';
 
 export const useAuthStore = create()(
   persist(
     (set) => ({
+      // Initial state
       user: null,
       role: null,
+
+      // Actions
       setUser: (user) => set({ user }),
-      clearUser: () => set({ user: null, role: null }),
       setRole: (role) => set({ role }),
+      clearUser: () => set({ user: null, role: null }),
     }),
     {
       name: 'auth-store',
+      // Specify which parts of the state to persist
+      partialize: (state) => ({ 
+        user: state.user,
+        role: state.role 
+      }),
     }
   )
 );
